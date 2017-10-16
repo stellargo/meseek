@@ -25,7 +25,10 @@ class MyHTMLParser(HTMLParser):
 			elif (self.linkbegun==True):
 				self.link = self.link + data
 
+#A function that takes a query to be searched as parameter and gives output in the form of a list 
+#which contains all links for that query.
 def fetcher(query):
+	query = 'https://www.google.co.in/search?q=' + query
 	resp = requests.get(query)
 	if resp.ok:
 		parser = MyHTMLParser()
