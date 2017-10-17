@@ -12,12 +12,23 @@ class bcolors:
 
 def main():
 	print(bcolors.RED + "Running Meseek v1.0.0" + bcolors.ENDC)
+	customquery = ''
 
-	fixlist = fetcher(sys.argv[1])
+	if (sys.argv[1] == '--custom' or sys.argv[1] == '-c'):
+		i=2
+		while (i<len(sys.argv)):
+			customquery = customquery + sys.argv[i]
+			i+=1
+
+
+	fixlist = fetcher(customquery)
 	decision = 1
 	fix_counter = 1
 	
 	while (decision!=0):
+		if (len(fixlist)==0):
+			print("Input empty")
+			return
 		
 		print("Please select an option:")
 		print("1. Open Fix (" + str(fix_counter) + '/' + str(len(fixlist)) + ')')
