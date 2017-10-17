@@ -12,7 +12,7 @@ class MyHTMLParser(HTMLParser):
 	def handle_endtag(self, tag):
 		if (tag=='div' and self.started==True):
 			self.started=False
-			if (self.link!=''):
+			if (self.link!='' and ('...' not in self.link)):
 				self.result.append(self.link)
 			self.link=''
 			self.linkbegun=False
