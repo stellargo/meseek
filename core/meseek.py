@@ -2,38 +2,61 @@
 
 import sys
 import subprocess
+import itertools
+import threading
+import time
 from fetcher import fetcher
 from openurl import openurl
 
 class bcolors:
-	YELLOW = '\033[93m'
-	RED = '\033[91m'
+	BLUE = '\033[0;36m'
 	ENDC = '\033[0m'
 
 def main():
-	print(bcolors.RED + "Running Meseek v1.0.0" + bcolors.ENDC)
-	customquery = ''
+	print(bcolors.BLUE + "Running Meseek v1.0.0" + bcolors.ENDC)
+	query = ''
 
 	if (sys.argv[1] == '--custom' or sys.argv[1] == '-c'):
 		i=2
 		while (i<len(sys.argv)):
-			customquery = customquery + sys.argv[i]
+			query = query + sys.argv[i]
 			i+=1
+	else:
+		i=1
+		command = []
+		while (i<len(sys.argv)):
+			command.append(sys.argv[i])
+			i+=1
+		process = subprocess.run(command, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		
+		if (process.returncode==0):
+			query = str(process.stdout)
+			querylen = len(query)
+			query = query[2:querylen-1]
+			print(query.replace('\\n','\n'))
+			query = query.replace('\\n','')
+			print (bcolors.BLUE + "Command executed with no issues." + bcolors.ENDC)
+			return
+		else:
+			query = str(process.stderr)
+			querylen = len(query)
+			query = query[2:querylen-1]
+			print(query.replace('\\n','\n'))
+			query = query.replace('\\n','')
+	
+	fixlist = fetcher (query)
 
-
-	fixlist = fetcher(customquery)
 	decision = 1
 	fix_counter = 1
 	
 	while (decision!=0):
 		if (len(fixlist)==0):
-			print("Input empty")
+			print(bcolors.BLUE + "No Fix available" + bcolors.ENDC)
 			return
-		
-		print("Please select an option:")
+		print(bcolors.BLUE + "Please select an option:")
 		print("1. Open Fix (" + str(fix_counter) + '/' + str(len(fixlist)) + ')')
 		print("2. Share Fix with Meseek")
-		print("0. Exit")
+		print("0. Exit"  + bcolors.ENDC)
 		decision = int(input())
 		
 		if (decision==1):
@@ -41,7 +64,7 @@ def main():
 			openurl(url)
 			fix_counter += 1
 			if (fix_counter==len(fixlist)+1):
-				print("Meseek is out of solutions :(")
+				print(bcolors.BLUE + "Meseek ran out of solutions" + bcolors.ENDC)
 				decision = 0
 		
 		elif (decision==2):
