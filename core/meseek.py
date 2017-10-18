@@ -7,6 +7,7 @@ import threading
 import time
 from fetcher import fetcher
 from openurl import openurl
+from querycleaner import querycleaner
 
 class bcolors:
 	BLUE = '\033[0;36m'
@@ -23,9 +24,9 @@ def main():
 			i+=1
 	else:
 		i=1
-		command = []
+		command = ''
 		while (i<len(sys.argv)):
-			command.append(sys.argv[i])
+			command = sys.argv[i] + ' '
 			i+=1
 		process = subprocess.run(command, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 		
@@ -44,6 +45,7 @@ def main():
 			print(query.replace('\\n','\n'))
 			query = query.replace('\\n','')
 	
+	query = querycleaner(query)
 	fixlist = fetcher (query)
 
 	decision = 1
@@ -53,6 +55,7 @@ def main():
 		if (len(fixlist)==0):
 			print(bcolors.BLUE + "No Fix available" + bcolors.ENDC)
 			return
+		print("==="+query)
 		print(bcolors.BLUE + "Please select an option:")
 		print("1. Open Fix (" + str(fix_counter) + '/' + str(len(fixlist)) + ')')
 		print("2. Share Fix with Meseek")
@@ -71,7 +74,9 @@ def main():
 			#Write code here
 			decision=0
 
-
+		else:
+			print(bcolors.BLUE + "Not a valid option. Exiting." + bcolors.ENDC)
+			decision=0
 
 if __name__ == '__main__':
 	main()
