@@ -24,28 +24,27 @@ def main():
 			i+=1
 	else:
 		i=1
-		command = ''
+		command = []
 		while (i<len(sys.argv)):
-			command = sys.argv[i] + ' '
+			# command = sys.argv[i] + ' '
+			command.append(sys.argv[i])
 			i+=1
-		process = subprocess.run(command, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		try:
+			process = subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		except FileNotFoundError:
+			query = FileNotFoundError
 		
-		if (process.returncode==0):
+		if (query!=''):
+			query = querycleaner(query)
+		elif (process.returncode==0):
 			query = str(process.stdout)
-			querylen = len(query)
-			query = query[2:querylen-1]
-			print(query.replace('\\n','\n'))
-			query = query.replace('\\n','')
+			query = querycleaner(query)
 			print (bcolors.BLUE + "Command executed with no issues." + bcolors.ENDC)
 			return
 		else:
 			query = str(process.stderr)
-			querylen = len(query)
-			query = query[2:querylen-1]
-			print(query.replace('\\n','\n'))
-			query = query.replace('\\n','')
-	
-	query = querycleaner(query)
+			query = querycleaner(query)
+
 	fixlist = fetcher (query)
 
 	decision = 1
