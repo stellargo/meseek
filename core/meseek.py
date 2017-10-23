@@ -5,9 +5,12 @@ import subprocess
 import itertools
 import threading
 import time
+import logging
 from fetcher import fetcher
 from openurl import openurl
 from querycleaner import querycleaner
+
+logging.basicConfig(filename='meseek.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
 
 class bcolors:
 	BLUE = '\033[0;36m'
@@ -26,7 +29,6 @@ def main():
 		i=1
 		command = []
 		while (i<len(sys.argv)):
-			# command = sys.argv[i] + ' '
 			command.append(sys.argv[i])
 			i+=1
 		try:
@@ -46,6 +48,7 @@ def main():
 			query = querycleaner(query)
 
 	fixlist = fetcher (query)
+	logging.info('user queried: %s',query)
 
 	decision = 1
 	fix_counter = 1
@@ -71,10 +74,12 @@ def main():
 		
 		elif (decision==2):
 			#Write code here
+			logging.warning('User tried to give the solution')
 			decision=0
 
 		else:
 			print(bcolors.BLUE + "Not a valid option. Exiting." + bcolors.ENDC)
+			logging.warning('User tried to use invalid option.')
 			decision=0
 
 if __name__ == '__main__':
