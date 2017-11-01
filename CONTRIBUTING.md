@@ -1,3 +1,7 @@
+# Current Status
+
+If you are not assigned to the issue, the PR will not be merged.
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
