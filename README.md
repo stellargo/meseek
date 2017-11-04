@@ -1,7 +1,7 @@
+![](https://travis-ci.org/stellargo/meseek.svg?branch=master)
+
 # meseek
 Under Development
-
-![Alt Text](https://media.giphy.com/media/l1J9NT9GqYGY1luxy/giphy.gif)
 
 # Mini Docs:
 * Add python meseek.py before your command
