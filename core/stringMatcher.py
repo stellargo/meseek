@@ -24,4 +24,3 @@ def stringMatcher(s, t):
         # print (numValues)
         # print (normalizedValue)
         return ((normalizedValue)  * 100 / numValues)
-        
