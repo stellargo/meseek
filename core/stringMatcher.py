@@ -1,7 +1,6 @@
 def stringMatcher(s, t):
-        ''' From Wikipedia article; Iterative with two matrix rows. 
-        I have modified it such that it returns a percentage, but have to change what it returns for 0'''
-        if s == t: return 100
+        ''' From Wikipedia article; Iterative with two matrix rows. '''
+        if s == t: return 100.0
         elif len(s) == 0: return len(t)
         elif len(t) == 0: return len(s)
         v0 = [None] * (len(t) + 1)
@@ -15,4 +14,13 @@ def stringMatcher(s, t):
                 v1[j + 1] = min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost)
             for j in range(len(v0)):
                 v0[j] = v1[j]
-        return 100 - ((v1[len(t)] - abs(len(s) - len(t))) * 100 / max(len(s), len(t)))
+        flag = 0
+        if (len(s) != len(t)):
+            flag = 1
+        value = v1[len(t)]
+        numValues = (max(len(s), len(t)) - abs(len(s) - len(t)) + flag)
+        normalizedValue = (max(len(s), len(t)) - value)
+        # print (value)
+        # print (numValues)
+        # print (normalizedValue)
+        return ((normalizedValue)  * 100 / numValues)
